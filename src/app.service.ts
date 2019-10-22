@@ -10,12 +10,11 @@ export class AppService {
   ) { }
 
   async getCachedLink(short: string): Promise<string> {
-    const cache = await this.redisService.getClient();
-    return cache.get(short);
+    return this.redisService.getClient().get(short);
   }
 
   async minify(link: string): Promise<string> {
-    const cache = await this.redisService.getClient();
+    const cache = this.redisService.getClient();
     const id = await this.randomIdService.create(cache);
     return cache.set(id, link).then(okValue => id);
   }
