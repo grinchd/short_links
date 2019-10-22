@@ -9,8 +9,9 @@ export class AppService {
     private readonly randomIdService: RandomIdService
   ) { }
 
-  getHello(): string {
-    return 'Hello World!';
+  async getCachedLink(short: string): Promise<string> {
+    const cache = await this.redisService.getClient();
+    return cache.get(short);
   }
 
   async minify(link: string): Promise<string> {

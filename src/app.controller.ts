@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Redirect, Request } from '@nestjs/common';
 import { AppService } from './app.service';
 
 
@@ -10,9 +10,11 @@ export class MinifyLinkDto {
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('*')
+  @Redirect('https://google.com', 302)
+  async navigate(@Req() req: Request) {
+    const url = await this.appService.getCachedLink(req.url.replace('/', ''));
+    return { url };
   }
 
   @Post('/minify')
