@@ -18,7 +18,8 @@ export class AppController {
   }
 
   @Post('/minify')
-  minify(@Body() minifyLinkDto: MinifyLinkDto): Promise<string> {
-    return this.appService.minify(minifyLinkDto.link);
+  async minify(@Body() minifyLinkDto: MinifyLinkDto, @Req() req: Request): Promise<string> {
+    return this.appService.minify(minifyLinkDto.link)
+      .then(short => `http://${req.headers['host']}/${short}`);
   }
 }
